@@ -48,8 +48,6 @@ let isDrawKey = true;
 //opening, main, ending
 let mode = 'opening';
 
-let exec307 = false;
-
 let lastMoveEnemyTime = null;
 
 let lastPlayerMoveTime = new Date().getTime();

@@ -132,14 +132,6 @@ function a() {
 			if (pause && !gameOver && !stageClear) {
 				messages = [];
 				pause = false;
-
-				if (exec307) {
-					playerX = 1;
-					playerY = 1;
-					playerDirection = 'e';
-					exec307 = false;
-				}
-				
 				if (hasKey) {
 					isDrawKey = false;
 				}
@@ -346,10 +338,8 @@ function encountEnemy() {
 		isEncount = true;
 	}
 	if (isEncount) {
-		messages.push('307 Temporary Redirect');
-		messages.push('Bad Req> Go away!');
-		messages.push('(Press button A)');
-		pause = true;
-		exec307 = true;
+		messages = [];
+		messages.push('400 Bad Request');
+		messages.push('HELO');
 	}
 }

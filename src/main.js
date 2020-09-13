@@ -19,7 +19,7 @@ function main() {
 	if (!pause) {
 		moveEnemy();
 		
-//		encountEnemy();
+		encountEnemy();
 	}
 	
 	drawPerspective();

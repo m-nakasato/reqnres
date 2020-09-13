@@ -173,7 +173,6 @@ function resetGlobalVar() {
 //	hasMap = true;
 	isDrawKey = true;
 //	mode = 'opening';
-	exec307 = false;
 	lastMoveEnemyTime = null;
 //	lastPlayerMoveTime = new Date().getTime();
 }
