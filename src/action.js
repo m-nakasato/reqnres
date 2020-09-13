@@ -207,10 +207,9 @@ function open() {
 				}
 			} else {
 				messages.push('403 Forbidden');
-				if (stageNum < NUM_OF_STAGE) {
-					messages.push('This door requires a key.');
-				} else {
-					messages.push('Res> Help me!');
+				messages.push('This door requires a key.');
+				if (stageNum == NUM_OF_STAGE) {
+					messages.push('Response> I\'m here!');
 				}
 			}
 		} else
