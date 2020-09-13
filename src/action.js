@@ -111,6 +111,7 @@ function tutorial01() {
 	    needTutorial01 && playerDirection == 'e' && field[playerY][playerX + 1]['type'] == 2 ||
 	    needTutorial01 && playerDirection == 's' && field[playerY + 1][playerX]['type'] == 2 ||
 	    needTutorial01 && playerDirection == 'w' && field[playerY][playerX - 1]['type'] == 2) {
+		messages.push('Hint:');
 		messages.push('Press button B toward the door');
 		messages.push('to open it.');
 	}
