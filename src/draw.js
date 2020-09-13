@@ -10,36 +10,42 @@ function drawMapEnemy() {
 
 function drawMapPlayer() {
 	perspectiveRenderer.beginPath();
-	perspectiveRenderer.fillStyle = 'blue';
+	perspectiveRenderer.fillStyle = 'rgba(0, 0, 255, 1)';
 	perspectiveRenderer.fillRect(MAP_X + playerX * CELL_SIZE, MAP_Y + playerY * CELL_SIZE, PLAYER_W, PLAYER_H);
-/*	let arrowX;
-	let arrowY;
-	let arrowChr = '';
+	let adjX = 0;
+	let adjY = 0;
 	if (playerDirection == 'n') {
-		arrowX = playerX * CELL_SIZE;
-		arrowY = playerY * CELL_SIZE;
-		arrowChr = '^';
+		adjX = 0;
+		adjY = -1;
 	} else if (playerDirection == 'e') {
-		arrowX = playerX * CELL_SIZE + CELL_SIZE;
-		arrowY = playerY * CELL_SIZE + CELL_SIZE;
-		arrowChr = '>';
+		adjX = 1;
+		adjY = 0;
 	} else if (playerDirection == 's') {
-		arrowX = playerX * CELL_SIZE;
-		arrowY = playerY * CELL_SIZE + CELL_SIZE + CELL_SIZE;
-		arrowChr = 'v';
+		adjX = 0;
+		adjY = 1;
 	} else if (playerDirection == 'w') {
-		arrowX = playerX * CELL_SIZE - CELL_SIZE;
-		arrowY = playerY * CELL_SIZE + CELL_SIZE;
-		arrowChr = '<';
+		adjX = -1;
+		adjY = 0;
 	}
-	perspectiveRenderer.beginPath();
-	perspectiveRenderer.textBaseline = 'alphabetic';
-	perspectiveRenderer.textAlign = 'start';
-	perspectiveRenderer.fillStyle = 'green';
-	perspectiveRenderer.strokeStyle = 'green';
-	perspectiveRenderer.font = PLAYER_W + 'px sans-serif';
-	perspectiveRenderer.fillText(arrowChr, MAP_X + arrowX, MAP_Y + arrowY);
-	perspectiveRenderer.strokeText(arrowChr, MAP_X + arrowX, MAP_Y + arrowY);*/
+	const MAX = 6;
+	const ALPHA_ADJ = 1 / MAX;
+	for (let i = 1; i < MAX; i++) {
+		let markerX = playerX + adjX * i;
+		let markerY = playerY + adjY * i;
+		if (FIELD_H > markerY && markerY > 0 &&
+		FIELD_W > markerX && markerX > 0) {
+			if (field[markerY][markerX]['type'] == 0) {
+				perspectiveRenderer.beginPath();
+				let alpha = 1 - (ALPHA_ADJ * i) - 0.5;
+				if (alpha > 0) {
+					perspectiveRenderer.fillStyle = 'rgba(0, 0, 255, ' + alpha + ')';
+					perspectiveRenderer.fillRect(MAP_X + markerX * CELL_SIZE, MAP_Y + markerY * CELL_SIZE, PLAYER_W, PLAYER_H);
+				}
+			} else {
+				break;
+			}
+		}
+	}
 }
 
 function drawMapField() {
@@ -50,21 +56,6 @@ function drawMapField() {
 				perspectiveRenderer.beginPath();
 				perspectiveRenderer.fillStyle = '#0f0';
 				perspectiveRenderer.fillRect(MAP_X + col * CELL_SIZE, MAP_Y + row * CELL_SIZE, CELL_SIZE, CELL_SIZE);
-			//壁
-			} else if (field[row][col]['type'] == 1) {
-//				perspectiveRenderer.beginPath();
-//				perspectiveRenderer.fillStyle = 'black';
-//				perspectiveRenderer.fillRect(MAP_X + col * CELL_SIZE, MAP_Y + row * CELL_SIZE, CELL_SIZE, CELL_SIZE);
-			//部屋
-			} else if (field[row][col]['type'] == 2) {
-//				perspectiveRenderer.beginPath();
-//				perspectiveRenderer.fillStyle = 'black';
-//				perspectiveRenderer.fillRect(MAP_X + col * CELL_SIZE, MAP_Y + row * CELL_SIZE, CELL_SIZE, CELL_SIZE);
-			//空いた部屋
-			} else if (field[row][col]['type'] == -1) {
-//				perspectiveRenderer.beginPath();
-//				perspectiveRenderer.fillStyle = 'yellow';
-//				perspectiveRenderer.fillRect(MAP_X + col * CELL_SIZE, MAP_Y + row * CELL_SIZE, CELL_SIZE, CELL_SIZE);
 			}
 		}
 	}
@@ -75,12 +66,12 @@ function drawMap() {
 	
 	drawMapPlayer();
 
-	drawMapEnemy();
+//	drawMapEnemy();
 }
 
 function drawCompass() {
-	const BASE_X = perspective.width * 0.68;
-	const BASE_Y = perspective.height * 0.68;
+	const BASE_X = perspective.width * 0.65;
+	const BASE_Y = perspective.height * 0.62;
 	perspectiveRenderer.beginPath();
 	perspectiveRenderer.fillStyle = 'black';
 	perspectiveRenderer.ellipse(BASE_X, BASE_Y, 20, 8, 0, 0, 2 * Math.PI);
@@ -254,25 +245,34 @@ function drawGoal() {
 	    playerDirection == 'e' && field[playerY][playerX + 1]['content'] == 'goal' && field[playerY][playerX + 1]['type'] == 0 ||
 	    playerDirection == 's' && field[playerY + 1][playerX]['content'] == 'goal' && field[playerY + 1][playerX]['type'] == 0 ||
 	    playerDirection == 'w' && field[playerY][playerX - 1]['content'] == 'goal' && field[playerY][playerX - 1]['type'] == 0) {
-		let x = perspective.width * 0.5;
-		let y = perspective.height * 0.6;
-		let radius = perspective.width * 0.09;
-		let bg = perspectiveRenderer.createRadialGradient(x, y, 0, x, y, radius);
-		bg.addColorStop(0.0, '#ffc0cb');
-		bg.addColorStop(1.0, '#7f6066');
-		perspectiveRenderer.beginPath();
-		perspectiveRenderer.fillStyle = bg;
-		perspectiveRenderer.arc(x, y, radius, 0, 2 * Math.PI, true);
-		perspectiveRenderer.fill();
-		perspectiveRenderer.beginPath();
-		perspectiveRenderer.lineWidth = 2;
-		perspectiveRenderer.strokeStyle = 'black';
-		perspectiveRenderer.arc(x - radius / 2.5, y - radius / 8, perspective.width * 0.025, 0, 180 / 180 * Math.PI, true);
-		perspectiveRenderer.stroke();
-		perspectiveRenderer.beginPath();
-		perspectiveRenderer.strokeStyle = 'black';
-		perspectiveRenderer.arc(x + radius / 2.5, y - radius / 8, perspective.width * 0.025, 0, 180 / 180 * Math.PI, true);
-		perspectiveRenderer.stroke();
+		if (stageNum < NUM_OF_STAGE) {
+			perspectiveRenderer.beginPath();
+			let gradientWarp = perspectiveRenderer.createLinearGradient(perspective.width * 0.375 + 10, 0, perspective.width * 0.625 - 10, 0);
+			gradientWarp.addColorStop(0.0, '#00dbde');
+			gradientWarp.addColorStop(1.0, '#fc00ff');
+			perspectiveRenderer.fillStyle = gradientWarp;
+			perspectiveRenderer.fillRect(perspective.width * 0.375 + 10, perspective.height * 0.375 + 10, perspective.width * 0.25 - 20, perspective.height * 0.25 - 10);
+		} else {
+			let x = perspective.width * 0.5;
+			let y = perspective.height * 0.6;
+			let radius = perspective.width * 0.09;
+			let bg = perspectiveRenderer.createRadialGradient(x, y, 0, x, y, radius);
+			bg.addColorStop(0.0, '#ffc0cb');
+			bg.addColorStop(1.0, '#7f6066');
+			perspectiveRenderer.beginPath();
+			perspectiveRenderer.fillStyle = bg;
+			perspectiveRenderer.arc(x, y, radius, 0, 2 * Math.PI, true);
+			perspectiveRenderer.fill();
+			perspectiveRenderer.beginPath();
+			perspectiveRenderer.lineWidth = 2;
+			perspectiveRenderer.strokeStyle = 'black';
+			perspectiveRenderer.arc(x - radius / 2.5, y - radius / 8, perspective.width * 0.025, 0, 180 / 180 * Math.PI, true);
+			perspectiveRenderer.stroke();
+			perspectiveRenderer.beginPath();
+			perspectiveRenderer.strokeStyle = 'black';
+			perspectiveRenderer.arc(x + radius / 2.5, y - radius / 8, perspective.width * 0.025, 0, 180 / 180 * Math.PI, true);
+			perspectiveRenderer.stroke();
+		}
 	}
 }
 
@@ -321,8 +321,15 @@ function drawTimeLimit() {
 	perspectiveRenderer.textBaseline = 'bottom';
 	perspectiveRenderer.fillStyle = '#0f0';
 	perspectiveRenderer.font = FONT_SIZE + 'px courier';
-//	perspectiveRenderer.fillText('TIME: ' + timeLeft, 5, perspective.height - 5);
-	perspectiveRenderer.fillText('TIME: ' + timeLeft + ' S: ' + playCount, 5, perspective.height - 5);
+	perspectiveRenderer.fillText('TIME: ' + timeLeft, 5, perspective.height - 5);
+}
+
+function drawStageNum() {
+	perspectiveRenderer.beginPath();
+	perspectiveRenderer.textBaseline = 'bottom';
+	perspectiveRenderer.fillStyle = '#0f0';
+	perspectiveRenderer.font = FONT_SIZE + 'px courier';
+	perspectiveRenderer.fillText('STAGE: ' + stageNum, 5, perspective.height - 20);
 }
 
 function renderKey(x, y, color) {
@@ -350,10 +357,12 @@ function drawKey() {
 }
 
 function drawKeySign() {
-	renderKey(10, perspective.height - 35, '#ff0');
+	renderKey(10, perspective.height - 50, '#ff0');
 }
 
 function opening() {
+	perspectiveRenderer.clearRect(0, 0, perspective.width, perspective.height);
+
 	perspectiveRenderer.beginPath();
 	perspectiveRenderer.fillStyle = 'black';
 	perspectiveRenderer.fillRect(0, 0, perspective.width, perspective.height);
@@ -372,7 +381,12 @@ function opening() {
 	perspectiveRenderer.fillText('Req N\' Res', 10, 10);
 	
 	messages = [];
-	messages.push('> wget http://example.com');
+	messages.push('> GET / HTTP/1.1');
+	messages.push('> Host: example.com');
+	messages.push('');
+	messages.push('Find \'Response\' in the maze of ');
+	messages.push('network traffic.');
+	messages.push('');
 	messages.push('(Press button A)');
 	perspectiveRenderer.beginPath();
 	perspectiveRenderer.fillStyle = '#0f0';

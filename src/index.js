@@ -19,7 +19,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
 	perspectiveRenderer = perspective.getContext('2d');
 	perspective.width = SCREEN_W;
 	perspective.height = SCREEN_H;
-	main();
+	opening();
 });
 
 function makeField() {
@@ -51,9 +51,9 @@ function makeField() {
 			field[row][col]['type'] = 1;
 			let direction;
 			if (row == 2) {
-				direction = rand(0, 3);
+				direction = randNum(0, 3);
 			} else {
-				direction = rand(1, 3);
+				direction = randNum(1, 3);
 			}
 			if (direction == 0) {
 				//n
@@ -130,17 +130,23 @@ function makeField() {
 			}
 		}
 	}
-
-	let contentIndex = 0;
-	while (contentIndex < CONTENTS.length) {
-		let index = rand(0, doors.length - 1);
-		if (field[doors[index].row][doors[index].col]['content'] == '') {
-			field[doors[index].row][doors[index].col]['content'] = CONTENTS[contentIndex];
-			if (contentIndex < CONTENTS.length) contentIndex++;
+	
+//console.log(JSON.stringify(doors));
+	if (doors.length <= CONTENTS.length) {
+		console.info('500 Internal Server Error\nRecreate the field.');
+//		location.reload();
+		makeField();
+		return;
+	}
+	for (let i = 0; i < CONTENTS.length; i++) {
+		if (doors.length < 1) {
+			break;
 		}
+		let targetIndex = randNum(0, doors.length - 1);
+		field[doors[targetIndex].row][doors[targetIndex].col]['content'] = CONTENTS[i];
+		doors = doors.filter((item, index) => index !== targetIndex);
 	}
 
-//console.log(doors);
 //console.log(field);
 }
 
@@ -148,13 +154,17 @@ makeField();
 
 function resetGlobalVar() {
 	startTime = null;
+	isGameOver = false;
 	gameOver = false;
+	isStageClear = false;
+	stageClear = false;
 	playerX = 1;
 	playerY = 1;
 	playerDirection = 'e';
 	enemyX = FIELD_W - 2;
 	enemyY = FIELD_H - 2;
 	enemyDirection = 'w';
+//	pause = true;
 	pauseStartTime = null;
 	downTime = 0;
 	timeLeft = TIME_LIMIT;
@@ -162,15 +172,14 @@ function resetGlobalVar() {
 //	hasMap = false;
 	hasMap = true;
 	isDrawKey = true;
-	mode = 'opening';
-	isInit = false;
+//	mode = 'opening';
 	exec307 = false;
 	lastMoveEnemyTime = null;
+//	lastPlayerMoveTime = new Date().getTime();
 }
 
 function init() {
 	resetGlobalVar();
+	MAP_X = SCREEN_W - FIELD_W * CELL_SIZE;
 	makeField();
-	playCount++;
-//console.log(playCount);
 }

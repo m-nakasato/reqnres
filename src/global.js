@@ -1,7 +1,18 @@
+let stageNum = 1;
+
+let FIELD_W = 1 + 8 * stageNum;
+
+let MAP_X = SCREEN_W - FIELD_W * CELL_SIZE;
 
 let startTime = null;
 
+let isGameOver = false;
+
 let gameOver = false;
+
+let isStageClear = false;
+
+let stageClear = false;
 
 let playerX = 1;
 let playerY = 1;
@@ -15,7 +26,8 @@ let messages = [];
 
 let needTutorial01 = true;
 
-let pause = true;
+//let pause = true;
+let pause = false;
 
 let pauseStartTime = null;
 
@@ -36,16 +48,14 @@ let isDrawKey = true;
 //opening, main, ending
 let mode = 'opening';
 
-let playCount = 1;
-
-let isInit = false;
-
 let exec307 = false;
 
 let lastMoveEnemyTime = null;
 
-//let lastPlayerMoveTime = new Date().getTime();
-let lastPlayerMoveTime = null;
+let lastPlayerMoveTime = new Date().getTime();
+//let lastPlayerMoveTime = null;
 
 let perspective = null;
 let perspectiveRenderer = null;
+
+let mainLoopId = null;
