@@ -169,8 +169,8 @@ function resetGlobalVar() {
 	downTime = 0;
 	timeLeft = TIME_LIMIT;
 	hasKey = false;
-//	hasMap = false;
-	hasMap = true;
+	hasMap = false;
+//	hasMap = true;
 	isDrawKey = true;
 //	mode = 'opening';
 	exec307 = false;
