@@ -40,8 +40,8 @@ let field;
 
 let hasKey = false;
 
-//let hasMap = false;
-let hasMap = true;
+let hasMap = false;
+//let hasMap = true;
 
 let isDrawKey = true;
 
